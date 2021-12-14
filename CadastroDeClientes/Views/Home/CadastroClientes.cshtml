@@ -1,0 +1,74 @@
+﻿@model CadastroDeClientes.Models.Clientes;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="containerLogin">
+    <div class="row">
+        <h3 class="titulo">Cadastre um novo cliente</h3>
+    </div>
+    <div class="row">
+        <section id="Cadastro">
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Nome, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Nome, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Nome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.CPF, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.CPF, new { @type = "number", @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.CPF, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Email, new {  @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.DataNascimento, "Data Nascimento",  new {@class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.DataNascimento,  new  { @type = "date", @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.DataNascimento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.End, "Endereço", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.End, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.End, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Login, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(x => x.Login, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.Login, "", new { @class = "text-danger" })
+ 
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Senha, new { @class = "form-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(x => x.Senha, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Senha, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                        <input type="submit" class="btn btn-success" value="Cadastrar" />
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>

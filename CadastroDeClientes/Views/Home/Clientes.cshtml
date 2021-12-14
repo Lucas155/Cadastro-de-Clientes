@@ -1,0 +1,214 @@
+﻿@model List<CadastroDeClientes.Models.Clientes>
+
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<div class="cadastro">
+    <section id="cadastro_cabecalho">
+        <h1>@ViewBag.Title</h1>
+    </section>
+    <section id="cadastro_conteudo">
+        <div class="row">
+            <div id="cabecalho_grid" class="row container">
+                <a id="btn_incluir" class="btn btn-success" href='@Url.Action("CadastroClientes", "Home")'><i class="glyphicon glyphicon-plus"></i>Novo Cadastro</a>  
+            </div>
+            <div>
+                <div class="col-md-12">
+                    <table id="grid_cadastro" class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Email</th>
+                                <th>Data de Nascimento</th>
+                                <th>Endereço</th>
+                                <th>Login</th>
+                                <th>Senha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr data-id="@item.Id">
+                                    <td>@item.Nome</td>
+                                    <td>@item.CPF</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.DataNascimento</td>
+                                    <td>@item.End</td>
+                                    <td>@item.Login</td>
+                                    <td>@item.Senha</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-alterar" role="button"><i class="glyphicon glyphicon-pencil"></i>Alterar</a>
+                                        <a class="btn btn-danger btn-excluir" role="button"><i class="glyphicon glyphicon-trash"></i>Excluir</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@Html.Hidden("id_cadastro")
+<div id="modal_cadastro" class="form-horizontal invisivel" role="dialog">
+    <div id="msg_mensagem_aviso invisivel" class="text-danger">
+    </div>
+    <fieldset>
+        <div class="row">
+            <div class="form-group">
+                @Html.Label("txt_nome", "Nome", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_nome", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_CPF", "CPF", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_CPF", null, new { @type = "number", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_email", "Email", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_email", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_data", "Data", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_data", null, new { @type = "date", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_end", "Endereço", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_end", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_login", "Login", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_login", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("txt_senha", "Senha", new { @class = "col-md-3 control-label" })
+                <div class="col-md">
+                    @Html.TextBox("txt_senha", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="modal-footer">
+                            <a id="btn_sair" class="btn btn-default" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i>Sair</a>
+                            <a id="btn_confirmar" class="btn btn-primary" role="button" data-dismiss="modal"><i class="glyphicon glyphicon-ok"></i>Salvar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+@section Scripts{
+    <script>
+        function abrir_form(dados) {
+            $('#id_cadastro').val(dados.id);
+            $('#txt_nome').val(dados.nome);
+            $('#txt_CPF').val(dados.cpf);
+            $('#txt_email').val(dados.email);
+            $('#txt_data').val(dados.dataNascimento);
+            $('#txt_end').val(dados.end);
+            $('#txt_login').val(dados.login);
+            $('#txt_senha').val(dados.senha);
+            var modal_cadastro = $('#modal_cadastro');
+            $('#msg_mensagem_aviso').empty();
+            $('#msg_aviso').hide();
+            $('#msg_mensagem_aviso').hide();
+            $('#msg_erro').hide();
+            bootbox.dialog({
+                title: '@ViewBag.Title',
+                message: modal_cadastro
+            })
+            .on('shown.bs.modal', function () {
+                modal_cadastro.show(0, function () {
+                    $('#txt_nome').focus();
+                });
+            })
+            .on('hidden.bs.modal', function () {
+                modal_cadastro.hide().appendTo('body');
+            });
+        }
+
+        $(document).on('click', '#btn_incluir', function () {
+            abrir_form({ Id: 0, Nome: '', Ativo: true });
+        })
+            .on('click', '.btn-alterar', function () {
+            var btn = $(this),
+                id = btn.closest('tr').attr('data-id'),
+                url = '@Url.Action("RecuperarProduto", "Home")',
+                param = { 'id': id };
+            $.post(url, param, function (response) {
+                if (response) {
+                    abrir_form(response);
+                }
+            });
+            })
+
+        .on('click', '.btn-excluir', function () {
+            var btn = $(this),
+                tr = btn.closest('tr'),
+                id = tr.attr('data-id'),
+                url = '@Url.Action("ExcluirCliente", "Home")',
+                param = { 'id': id };
+            bootbox.confirm({
+                message: "Realmente deseja excluir o cliente?",
+                buttons: {
+                    confirm: {
+                        label: 'Sim',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'Não',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.post(url, param, function (response) {
+                            if (response) {
+                                tr.remove();
+                            }
+                        });
+                    }
+                }
+            });
+        })
+
+            .on('click', '#btn_confirmar', function () {
+            var btn = $(this),
+            id = btn.closest('tr').attr('data-id'),
+            url = '@Url.Action("SalvaCliente", "Home")',
+            param = {
+                Id: $('#id_cadastro').val(),
+                nome: $('#txt_nome').val(),
+                CPF: $('#txt_CPF').val(),
+                Email: $('#txt_email').val(),
+                DataNascimento: $('#txt_data').val(),
+                End: $('#txt_end').val(),
+                Login:$('#txt_login').val(),
+                Senha:$('#txt_senha').val()
+            };
+            $.post(url, param, function (response) {
+                window.location.reload();
+                if (response.Resultado == "OK") {
+
+                    $('#modal_cadastro').parents('.bootbox').modal('hide');
+                }
+            });
+         });
+
+    </script>
+}
